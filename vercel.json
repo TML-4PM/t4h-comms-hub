@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Comms-Source", "value": "supabase:public.comms_publication" },
+        { "key": "X-Robots-Tag", "value": "all" },
+        { "key": "Cache-Control", "value": "public, max-age=300, s-maxage=600" }
+      ]
+    }
+  ]
+}
