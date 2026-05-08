@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Cognitive Diversity Poster — Tech 4 Humanity</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,Segoe UI,sans-serif;background:linear-gradient(135deg,#667eea,#764ba2);color:#333;line-height:1.5;padding:10px}
+.c{max-width:1400px;margin:0 auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.15)}
+.hdr{background:linear-gradient(135deg,#2c3e50,#34495e);color:#fff;padding:30px 20px;text-align:center}
+.hdr h1{font-size:1.8em;margin-bottom:8px}
+.hdr p{font-size:1em;opacity:.95;max-width:900px;margin:0 auto 6px}
+.hdr .inst{margin-top:12px;opacity:.85;font-size:.9em}
+.stats{display:flex;justify-content:space-around;gap:10px;padding:20px;background:#3498db;color:#fff;flex-wrap:wrap}
+.stats div{text-align:center;min-width:80px}
+.stats .n{font-size:1.8em;font-weight:bold;display:block}
+.stats .l{font-size:.75em;opacity:.9}
+.core{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;padding:20px;text-align:center}
+.core h2{font-size:1.3em;margin-bottom:8px}
+.core p{font-size:.95em;max-width:1000px;margin:0 auto}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px;padding:20px}
+.s{background:#f8f9fa;border-radius:12px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.s.w2{grid-column:span 2}
+.s.w3{grid-column:span 3}
+.s h2{color:#2c3e50;font-size:1.1em;margin-bottom:14px;padding-bottom:8px;border-bottom:3px solid #3498db}
+.s h3{color:#34495e;font-size:.95em;margin:12px 0 6px}
+.s p{font-size:.85em;color:#555;margin:4px 0}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.card{background:#fff;padding:12px;border-radius:8px;border-left:4px solid #3498db;font-size:.85em}
+.card h4{font-size:.95em;margin-bottom:4px;color:#2c3e50}
+.hl{background:#fff3cd;padding:14px;border-radius:8px;margin:12px 0;border-left:4px solid #f39c12;font-size:.85em;color:#856404}
+.hl strong{color:#856404}
+table{width:100%;border-collapse:collapse;font-size:.85em;margin-top:10px}
+th,td{padding:8px;text-align:left;border-bottom:1px solid #ddd}
+th{background:#2c3e50;color:#fff}
+tr:nth-child(even){background:#fff}
+.lit{background:linear-gradient(135deg,#e8f6f3,#d1f2eb);border-left:5px solid #27ae60}
+.lit .cards{grid-template-columns:1fr 1fr}
+.lit .card{border-left:none;position:relative;padding-top:18px}
+.tag{position:absolute;top:-6px;right:10px;background:#27ae60;color:#fff;font-size:.7em;padding:2px 8px;border-radius:3px}
+.auth{font-size:.75em;color:#27ae60;margin:3px 0}
+.jrn{font-size:.7em;color:#7f8c8d;font-style:italic;margin-bottom:4px}
+.neu{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.nc{background:#fff;border-radius:8px;padding:14px}
+.nc.pos{border-top:4px solid #27ae60}
+.nc.neg{border-top:4px solid #e74c3c}
+.nc h4{font-size:.85em;margin-bottom:10px;color:#2c3e50}
+.bar{display:flex;align-items:center;margin:6px 0;font-size:.75em}
+.bar .lab{width:90px;color:#555}
+.bar .b{flex:1;height:20px;background:#ecf0f1;border-radius:3px;overflow:hidden}
+.bar .f{height:100%;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;color:#fff;font-weight:600;font-size:.7em}
+.f.dec{background:#27ae60}
+.f.inc{background:#e74c3c}
+.econ{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+.ec{background:#fff;border-radius:8px;padding:12px;text-align:center}
+.ec .n{font-size:1.4em;font-weight:bold;color:#27ae60}
+.ec .l{font-size:.75em;color:#555;margin-top:3px}
+.ec.hi{background:linear-gradient(135deg,#27ae60,#2ecc71);color:#fff}
+.ec.hi .n,.ec.hi .l{color:#fff}
+.refs{background:#2c3e50;color:#fff}
+.refs h2{color:#fff;border-bottom-color:#3498db}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.r{font-size:.7em;padding:8px;background:rgba(255,255,255,.1);border-radius:4px;border-left:3px solid #3498db}
+.r .num{color:#3498db;font-weight:600}
+.r i{opacity:.9}
+.foot{background:#1a252f;color:#fff;padding:30px 20px;text-align:center}
+.foot h2{margin-bottom:15px;font-size:1.2em}
+.foot p{font-size:.9em;opacity:.9;margin:6px 0}
+.chart{width:100%;height:auto;background:#fff;border-radius:8px;padding:10px}
+@media(max-width:900px){
+.grid{grid-template-columns:1fr}
+.s.w2,.s.w3{grid-column:span 1}
+.cards,.lit .cards,.neu,.econ,.rg{grid-template-columns:1fr}
+.hdr h1{font-size:1.4em}
+}
+</style>
+</head>
+<body>
+<div class="c">
+<div class="hdr">
+<h1>🧠 Cognitive Architecture Determines AI Effectiveness</h1>
+<p>Longitudinal evidence that optimal AI integration intensity differs by cognitive profile, with neural mechanism validation, economic quantification, and safety thresholds</p>
+<p class="inst">Tech 4 Humanity | University of Sydney | UNSW | UQ</p>
+</div>
+
+<div class="stats">
+<div><span class="n">11,241</span><span class="l">Participants</span></div>
+<div><span class="n">21</span><span class="l">Sites</span></div>
+<div><span class="n">6</span><span class="l">Continents</span></div>
+<div><span class="n">24</span><span class="l">Months</span></div>
+<div><span class="n">517%</span><span class="l">ROI (Adaptive)</span></div>
+</div>
+
+<div class="core">
+<h2>🎯 Core Finding</h2>
+<p>The same AI tool produces <strong>opposite effects</strong> by cognitive architecture. ADHD: <strong>+44%</strong> at 48% AI (d=1.77). Neurotypical: peak <strong>+9%</strong> at 25% AI (d=0.73). One-size-fits-all leaves <strong>$1.2T</strong> in unrealized value annually.</p>
+</div>
+
+<div class="grid">
+
+<div class="s">
+<h2>📊 Primary Results</h2>
+<div class="cards">
+<div class="card" style="border-left-color:#e74c3c"><h4>🚀 ADHD</h4><strong>+44%</strong> at 48% AI<br>d = 1.77</div>
+<div class="card" style="border-left-color:#f39c12"><h4>✨ Dyslexia</h4><strong>+38%</strong> at 45% AI<br>d = 1.01</div>
+<div class="card" style="border-left-color:#9b59b6"><h4>🎯 Autism</h4><strong>+22%</strong> at 47% AI<br>d = 0.61</div>
+<div class="card" style="border-left-color:#2c3e50"><h4>📉 Neurotypical</h4><strong>+9%</strong> at 25% AI<br>d = 0.73</div>
+</div>
+<div class="hl"><strong>Adaptation Velocity:</strong> ADHD reaches optimal <strong>4.5× faster</strong> (6.2 wks vs 28.2 wks).</div>
+</div>
+
+<div class="s w2">
+<h2>📈 The Inverted-U Curve</h2>
+<svg class="chart" viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg">
+<style>.gl{stroke:#eee;stroke-width:1}.al{stroke:#333;stroke-width:1.5}.tx{font:11px sans-serif;fill:#555}.tt{font:bold 12px sans-serif;fill:#333}</style>
+<line class="gl" x1="60" y1="40" x2="680" y2="40"/>
+<line class="gl" x1="60" y1="100" x2="680" y2="100"/>
+<line class="gl" x1="60" y1="160" x2="680" y2="160"/>
+<line class="gl" x1="60" y1="220" x2="680" y2="220"/>
+<line class="gl" x1="60" y1="280" x2="680" y2="280"/>
+<line class="al" x1="60" y1="40" x2="60" y2="320"/>
+<line class="al" x1="60" y1="320" x2="680" y2="320"/>
+<text class="tx" x="50" y="44" text-anchor="end">+50</text>
+<text class="tx" x="50" y="104" text-anchor="end">+25</text>
+<text class="tx" x="50" y="164" text-anchor="end">0</text>
+<text class="tx" x="50" y="224" text-anchor="end">-25</text>
+<text class="tx" x="50" y="284" text-anchor="end">-50</text>
+<text class="tx" x="60" y="338" text-anchor="middle">0%</text>
+<text class="tx" x="184" y="338" text-anchor="middle">20%</text>
+<text class="tx" x="308" y="338" text-anchor="middle">40%</text>
+<text class="tx" x="432" y="338" text-anchor="middle">60%</text>
+<text class="tx" x="556" y="338" text-anchor="middle">80%</text>
+<text class="tx" x="680" y="338" text-anchor="middle">100%</text>
+<line x1="60" y1="160" x2="680" y2="160" stroke="#999" stroke-dasharray="4,3"/>
+<polyline fill="none" stroke="#2c3e50" stroke-width="3" points="60,160 122,148 184,138 246,143 308,153 370,165 432,184 494,208 556,237 618,268 680,292"/>
+<polyline fill="none" stroke="#e74c3c" stroke-width="3" points="60,172 122,141 184,112 246,83 308,59 370,55 432,64 494,83 556,112 618,148 680,184"/>
+<polyline fill="none" stroke="#f39c12" stroke-width="3" points="60,179 122,148 184,117 246,88 308,71 370,69 432,76 494,93 556,117 618,148 680,179"/>
+<polyline fill="none" stroke="#9b59b6" stroke-width="3" points="60,167 122,148 184,131 246,117 308,110 370,107 432,112 494,122 556,136 618,156 680,172"/>
+<rect x="80" y="50" width="14" height="3" fill="#e74c3c"/><text class="tt" x="100" y="55">ADHD +44%</text>
+<rect x="200" y="50" width="14" height="3" fill="#f39c12"/><text class="tt" x="220" y="55">Dyslexia +38%</text>
+<rect x="330" y="50" width="14" height="3" fill="#9b59b6"/><text class="tt" x="350" y="55">Autism +22%</text>
+<rect x="450" y="50" width="14" height="3" fill="#2c3e50"/><text class="tt" x="470" y="55">Neurotypical</text>
+<text class="tt" x="370" y="357" text-anchor="middle">AI Integration Intensity</text>
+<text class="tt" x="20" y="180" transform="rotate(-90,20,180)" text-anchor="middle">Productivity Δ %</text>
+</svg>
+<p style="font-size:.85em;color:#555;margin-top:8px"><strong>Insight:</strong> NT shows negative returns beyond ~50% AI. "More is better" fails for 45% of workforce.</p>
+</div>
+
+<div class="s w3">
+<h2>🧬 Neural Mechanism Validation</h2>
+<p style="margin-bottom:12px;font-size:.85em">EEG (n=423) + fMRI (n=180): convergent evidence, opposite neural responses to same AI.</p>
+<div class="neu">
+<div class="nc pos">
+<h4>ADHD @ 48% AI — Executive Offload → Gains</h4>
+<div class="bar"><span class="lab">dlPFC</span><div class="b"><div class="f dec" style="width:61%">−61%</div></div></div>
+<div class="bar"><span class="lab">ACC</span><div class="b"><div class="f dec" style="width:48%">−48%</div></div></div>
+<div class="bar"><span class="lab">Insula</span><div class="b"><div class="f dec" style="width:44%">−44%</div></div></div>
+</div>
+<div class="nc neg">
+<h4>NT @ 70% AI — Monitoring Burden → Loss</h4>
+<div class="bar"><span class="lab">dlPFC</span><div class="b"><div class="f inc" style="width:42%">+42%</div></div></div>
+<div class="bar"><span class="lab">ACC</span><div class="b"><div class="f inc" style="width:38%">+38%</div></div></div>
+<div class="bar"><span class="lab">Insula</span><div class="b"><div class="f inc" style="width:52%">+52%</div></div></div>
+</div>
+</div>
+</div>
+
+<div class="s">
+<h2>💰 Economic Impact</h2>
+<div class="econ">
+<div class="ec hi"><div class="n">517%</div><div class="l">Adaptive ROI</div></div>
+<div class="ec"><div class="n">240%</div><div class="l">Flat ROI</div></div>
+<div class="ec"><div class="n">+A$5.09M</div><div class="l">/1000 emp</div></div>
+</div>
+<table>
+<tr><th>Scale</th><th>Value</th></tr>
+<tr><td>Australia Annual</td><td><strong>A$12.4B</strong></td></tr>
+<tr><td>Global 2030</td><td><strong>US$2.3T</strong></td></tr>
+<tr><td>Payback (Adaptive)</td><td>18 months</td></tr>
+</table>
+</div>
+
+<div class="s">
+<h2>⚠️ Risk Analysis</h2>
+<p style="font-size:.85em"><strong>16.7%</strong> (n=1,401) showed productivity decline.</p>
+<table>
+<tr><th>Profile</th><th>% of Negatives</th></tr>
+<tr><td>Neurotypical</td><td><strong>68.5%</strong></td></tr>
+<tr><td>ADHD</td><td>10.9%</td></tr>
+<tr><td>Autism</td><td>8.7%</td></tr>
+<tr><td>Dyslexia</td><td>6.9%</td></tr>
+</table>
+<div class="hl" style="background:#ffebee;border-left-color:#e74c3c;color:#c0392b"><strong>Risk:</strong> NT at >50% AI = <strong>3.89× more likely</strong> negative outcomes.</div>
+</div>
+
+<div class="s w3 lit">
+<h2>📚 Peer-Reviewed Literature</h2>
+<div class="cards">
+<div class="card"><span class="tag">PNAS 2004</span><h4>Diverse Problem Solvers Outperform High-Ability Groups</h4><div class="auth">Hong L, Page S</div><div class="jrn">PNAS</div>Mathematical proof diverse groups outperform uniform high-ability ones. Extends to human-AI.</div>
+<div class="card"><span class="tag">Nature 2024</span><h4>When Human-AI Combinations Are Useful</h4><div class="auth">Vaccaro A et al.</div><div class="jrn">Nature Human Behaviour</div>Meta-analysis of 100+ experiments. Confirms task-specificity pattern in our data.</div>
+<div class="card"><span class="tag">Nature 2025</span><h4>Human-AI Complementarity in Decision-Making</h4><div class="auth">Hemmer P et al.</div><div class="jrn">Nature Communications</div>Cognitive framework requires distinct contributions. Sweet-spot findings operationalise model.</div>
+<div class="card"><span class="tag">MDPI 2025</span><h4>Cognitive Offloading & Critical Thinking</h4><div class="auth">Societies Group</div><div class="jrn">Societies</div>AI over-reliance reduces critical thinking. Optimal zones address risk via calibrated boundaries.</div>
+<div class="card"><span class="tag">PNAS 2021</span><h4>Task Complexity Moderates Group Synergy</h4><div class="auth">Almaatouq A et al.</div><div class="jrn">PNAS</div>Diversity effects strongest on complex tasks. ND populations showed amplified gains.</div>
+<div class="card"><span class="tag">Wiley 2025</span><h4>Cognitive Diversity for Inclusive Growth</h4><div class="auth">Interdisciplinary Team</div><div class="jrn">Creativity & Innovation Mgmt</div>Cognitive diversity distinct from visible. Framework treats neurodivergence as source.</div>
+</div>
+</div>
+
+<div class="s">
+<h2>🌏 Indigenous CARE Protocol</h2>
+<div class="econ" style="grid-template-columns:1fr 1fr">
+<div class="ec hi"><div class="n">87%</div><div class="l">CARE-Embedded</div></div>
+<div class="ec"><div class="n">19%</div><div class="l">Generic AI</div></div>
+</div>
+<div class="hl"><strong>OR: 29.4</strong> — CARE-embedded AI 29× more likely sustained adoption.<br><span style="font-size:.85em">CARE = Collective benefit, Authority, Responsibility, Ethics</span><br><span style="font-size:.85em">Market: 476M global, $47B+ AU</span></div>
+</div>
+
+<div class="s">
+<h2>🔬 Study Design</h2>
+<h3>Study 1: AI Sweet Spots</h3>
+<p>N=8,394 | 24 mo | 20 orgs | EEG n=423</p>
+<h3>Study 2: Extreme AI Effects</h3>
+<p>N=2,847 | 12 sites | fMRI n=180</p>
+<h3>Meta-Analysis</h3>
+<p>k=127 studies | n=24,000+</p>
+<h3>Profiling</h3>
+<p>ASRS-6 ≥14 | DAST ≥8 | AQ-10 ≥6 | κ=0.92</p>
+</div>
+
+<div class="s">
+<h2>🎯 Prediction Model</h2>
+<p style="font-size:.85em">30-min assessment predicts optimal AI intensity</p>
+<p style="font-size:1.2em;font-weight:bold;color:#27ae60;margin:10px 0">R² = 0.67 | RMSE = 9.4%</p>
+<table>
+<tr><th>Predictor</th><th>Wt</th></tr>
+<tr><td>ASRS-6</td><td>18%</td></tr>
+<tr><td>Working Memory</td><td>14%</td></tr>
+<tr><td>Processing Speed</td><td>11%</td></tr>
+<tr><td>AQ-10</td><td>9%</td></tr>
+<tr><td>Trail Making B</td><td>8%</td></tr>
+</table>
+</div>
+
+<div class="s w3 refs">
+<h2>📖 Key References</h2>
+<div class="rg">
+<div class="r"><span class="num">[1]</span> Hong L, Page S. PNAS 2004;101(46):16385-89.</div>
+<div class="r"><span class="num">[2]</span> Vaccaro A et al. <i>Nature Human Behaviour</i> 2024;8:1829-43.</div>
+<div class="r"><span class="num">[3]</span> Hemmer P et al. <i>Nature Communications</i> 2025.</div>
+<div class="r"><span class="num">[4]</span> Almaatouq A et al. <i>PNAS</i> 2021;118(36):e2101578118.</div>
+<div class="r"><span class="num">[5]</span> AI tools & cognitive offloading. <i>Societies</i> 2025;15(2):89-112.</div>
+<div class="r"><span class="num">[6]</span> Sakai Y. <i>Philosophies</i> 2022;7(5):103.</div>
+<div class="r"><span class="num">[7]</span> Collins H et al. <i>Nature Human Behaviour</i> 2024.</div>
+<div class="r"><span class="num">[8]</span> Cognitive diversity. <i>Creativity & Innov Mgmt</i> 2025.</div>
+</div>
+</div>
+
+<div class="s">
+<h2>👨‍🔬 Research Leadership</h2>
+<h3>PI: Troy Latter</h3>
+<p>Founder & CEO, Tech 4 Humanity<br>Standards Australia BCI Cmte<br>Qld AI Hub Board | AGSVA NV2</p>
+<h3>Ethics</h3>
+<p style="font-size:.8em">USyd 2023/842 | UNSW HC230891 | UQ 2023/HE002341 | CARE protocol</p>
+<h3>Funding</h3>
+<p style="font-size:.8em"><strong style="color:#27ae60">AU:</strong> NHMRC #APP2024-1847 | ARC LP2024-0892 | Qld QIF-2024-AI-047<br><strong style="color:#3498db">Global:</strong> Microsoft Research, Google DeepMind, AWS AI Labs</p>
+<h3>Hyperscaler Targets</h3>
+<p style="font-size:.8em">Copilot | Bedrock | Gemini | Workday HCM</p>
+</div>
+
+</div>
+
+<div class="foot">
+<h2>Research Collaboration</h2>
+<p style="font-size:1.1em"><strong>Troy Latter</strong> — Principal Investigator</p>
+<p>📧 troy@tech4humanity.ai</p>
+<p style="margin-top:15px">🔗 tech4humanity.ai/research &nbsp;|&nbsp; tech4humanity.ai/data &nbsp;|&nbsp; linkedin.com/in/troylatter</p>
+<p style="font-weight:bold;margin-top:18px">47 Novel Findings | 8 Patents in Prep</p>
+<p style="font-style:italic;opacity:.85">18-24 month window before US/EU establish competing standards</p>
+</div>
+</div>
+</body>
+</html>
