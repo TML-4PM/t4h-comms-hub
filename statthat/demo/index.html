@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STATthat · TV View</title><style>
+:root{--bg:#0a0a0c;--fg:#f4f4f5;--dim:#71717a;--accent:#22d3ee;--warn:#f59e0b;--good:#34d399;--card:#18181b;--line:#27272a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#050507;color:var(--fg);font:14px/1.4 -apple-system,system-ui,sans-serif;min-height:100vh}
+.tv{max-width:1600px;margin:0 auto;padding:20px;display:grid;grid-template-columns:1fr 320px;gap:18px;min-height:100vh}
+.main{display:flex;flex-direction:column;gap:18px}
+.hud{background:linear-gradient(135deg,#0f0f12,#18181b);border:1px solid var(--line);border-radius:14px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between}
+.teams{display:flex;align-items:center;gap:24px}
+.team{display:flex;flex-direction:column;align-items:center;gap:4px}
+.team .name{font-size:13px;letter-spacing:.04em;color:var(--dim);text-transform:uppercase}
+.team .score{font-size:48px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+.team.home .score{color:#22c55e}
+.team.away .score{color:#3b82f6}
+.vs{color:var(--dim);font-size:14px;letter-spacing:.1em}
+.matchmeta{text-align:right;font-variant-numeric:tabular-nums}
+.matchmeta .label{font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.matchmeta .clock{font-size:28px;font-weight:600}
+.matchmeta .round{font-size:12px;color:var(--dim)}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;flex:1}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;min-height:200px}
+.card.watch_this{border-top:4px solid var(--accent)}
+.card.prediction{border-top:4px solid #a855f7}
+.card.weird_stat{border-top:4px solid var(--warn)}
+.card .kind{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.card.watch_this .kind{color:var(--accent)}
+.card.prediction .kind{color:#a855f7}
+.card.weird_stat .kind{color:var(--warn)}
+.card .headline{font-size:19px;font-weight:700;line-height:1.2;margin-bottom:8px}
+.card .body{font-size:13px;color:#a1a1aa;line-height:1.5;flex:1}
+.card .conf{font-size:10px;color:var(--dim);margin-top:10px}
+.sidebar{display:flex;flex-direction:column;gap:14px}
+.qr{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.qr .title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:8px}
+.qr .code{font-size:32px;font-weight:700;letter-spacing:.18em;color:var(--accent);margin-bottom:8px}
+.qr img{width:140px;height:140px;margin:8px auto;display:block;background:#fff;padding:6px;border-radius:6px}
+.qr .hint{font-size:11px;color:var(--dim)}
+.ticker{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;flex:1;overflow:hidden;display:flex;flex-direction:column}
+.ticker .title{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.ticker .live{font-size:9px;color:var(--good)}
+.ticker .live::before{content:'●';margin-right:4px;animation:p 1.4s ease-in-out infinite}
+@keyframes p{50%{opacity:.3}}
+.ticker .feed{display:flex;flex-direction:column;gap:6px;overflow-y:auto;flex:1;max-height:calc(100vh - 360px)}
+.ptn{background:#0f0f12;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-size:12px}
+.ptn .who{color:var(--accent);font-weight:600;font-size:11px}
+.ptn .msg{color:#d4d4d8;margin-top:2px}
+.ptn .meta{font-size:9px;color:var(--dim);margin-top:2px}
+.brand{text-align:center;font-size:10px;color:var(--dim);letter-spacing:.18em;text-transform:uppercase;padding:8px}
+@media(max-width:900px){.tv{grid-template-columns:1fr}.cards{grid-template-columns:1fr}}
+</style></head><body>
+<div class="tv"><div class="main">
+<div class="hud"><div class="teams"><div class="team home"><div class="name" id="home-name">--</div><div class="score" id="home-score">0</div></div><div class="vs">vs</div><div class="team away"><div class="name" id="away-name">--</div><div class="score" id="away-score">0</div></div></div><div class="matchmeta"><div class="label" id="period">--</div><div class="clock" id="clock">--:--</div><div class="round" id="match-meta">loading</div></div></div>
+<div class="cards" id="cards"></div>
+<div class="brand">STATthat · v0.1 · The match plays. The phone explains.</div>
+</div><div class="sidebar">
+<div class="qr"><div class="title">Join the room</div><div class="code" id="room-code">SOUTHS01</div><img id="qr-img" src="" alt="QR"><div class="hint">Scan or visit<br><span id="join-url"></span></div></div>
+<div class="ticker"><div class="title"><span>Participation feed</span><span class="live">LIVE</span></div><div class="feed" id="feed"></div></div>
+</div></div>
+<script>
+const S='https://lzfgigiyqpuuxslsygjt.supabase.co';
+const K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6ZmdpZ2l5cXB1dXhzbHN5Z2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MTc0NjksImV4cCI6MjA1OTk5MzQ2OX0.qUNzDEr2rxjRSClh5P4jeDv_18_yCCkFXTizJqNYSgg';
+const p=new URLSearchParams(location.search);
+const ROOM=(p.get('room')||'SOUTHS01').toUpperCase();
+document.getElementById('room-code').textContent=ROOM;
+const joinUrl=`https://t4h-comms-hub.vercel.app/statthat/mobile/?room=${ROOM}`;
+document.getElementById('join-url').textContent=joinUrl;
+document.getElementById('qr-img').src=`https://api.qrserver.com/v1/create-qr-code/?size=140x140&margin=0&data=${encodeURIComponent(joinUrl)}`;
+const esc=s=>String(s??'').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+const LABEL={watch_this:'Watch this',prediction:'Prediction',weird_stat:'Weird stat',moment:'Moment'};
+async function rpc(fn,b){const r=await fetch(`${S}/rest/v1/rpc/${fn}`,{method:'POST',headers:{'apikey':K,'Authorization':`Bearer ${K}`,'Content-Type':'application/json'},body:JSON.stringify(b||{})});return r.json();}
+async function tick(){try{const d=await rpc('statthat_room_state',{p_code:ROOM});if(!d.ok){document.getElementById('match-meta').textContent='Room not found: '+ROOM;return;}const m=d.room.match_state||{};document.getElementById('home-name').textContent=d.room.home_team||'';document.getElementById('away-name').textContent=d.room.away_team||'';document.getElementById('home-score').textContent=m.home_score??0;document.getElementById('away-score').textContent=m.away_score??0;document.getElementById('clock').textContent=m.clock??'--:--';document.getElementById('period').textContent=m.period??'';document.getElementById('match-meta').textContent=`${d.room.match_label} · ${m.venue||''}`;document.getElementById('cards').innerHTML=(d.cards||[]).map(c=>`<div class="card ${esc(c.kind)}"><div class="kind">${LABEL[c.kind]||c.kind}</div><div class="headline">${esc(c.headline)}</div><div class="body">${esc(c.body)}</div><div class="conf">conf ${Math.round(c.confidence*100)}%</div></div>`).join('');document.getElementById('feed').innerHTML=(d.participation||[]).map(p=>{const ago=Math.max(0,Math.floor((Date.now()-new Date(p.created_at).getTime())/1000));const ts=ago<60?`${ago}s ago`:`${Math.floor(ago/60)}m ago`;return `<div class="ptn"><div class="who">${esc(p.participant_handle)} ${esc(p.emoji||'')}</div><div class="msg">${esc(p.payload)}</div><div class="meta">${esc(p.kind)} · ${ts}</div></div>`;}).join('');}catch(e){console.error(e);}}
+tick();setInterval(tick,4000);
+</script></body></html>
