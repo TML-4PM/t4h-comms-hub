@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Synal Live Companion — Test Dashboard</title>
+<style>
+  :root { --bg:#0a0a0c; --fg:#f4f4f5; --dim:#71717a; --accent:#22d3ee; --warn:#f59e0b; --good:#34d399; --bad:#ef4444; --card:#18181b; --line:#27272a; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  html,body { background:var(--bg); color:var(--fg); font:14px/1.5 -apple-system,SF Pro Text,system-ui,sans-serif; min-height:100vh; padding:16px; }
+  .wrap { max-width:760px; margin:0 auto; }
+  h1 { font-size:18px; margin-bottom:4px; }
+  .lead { color:var(--dim); font-size:13px; margin-bottom:16px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:12px; }
+  .card h2 { font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); margin-bottom:10px; }
+  .stat-row { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; font-variant-numeric:tabular-nums; }
+  @media(min-width:560px){.stat-row{grid-template-columns:repeat(4,1fr);}}
+  .stat { background:#0f0f12; border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
+  .stat .k { font-size:10px; color:var(--dim); letter-spacing:.06em; text-transform:uppercase; }
+  .stat .v { font-size:16px; font-weight:600; margin-top:2px; }
+  .stat .v.good { color:var(--good); }
+  .stat .v.warn { color:var(--warn); }
+  .btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+  .btn { background:#1f1f23; border:1px solid var(--line); color:var(--fg); padding:9px 12px; border-radius:8px; font:600 12px/1 inherit; cursor:pointer; }
+  .btn.primary { background:var(--accent); color:#0a0a0c; border-color:var(--accent); }
+  .btn:hover { filter:brightness(1.1); }
+  .btn:disabled { opacity:.4; cursor:wait; }
+  .beat { background:#0f0f12; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:8px; padding:10px; margin-bottom:6px; }
+  .beat .trigger { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:2px; }
+  .beat .headline { font-size:14px; font-weight:600; margin-bottom:2px; }
+  .beat .explainer { font-size:12px; color:#a1a1aa; }
+  .beat.warn { border-left-color:var(--warn); }
+  .beat.warn .trigger { color:var(--warn); }
+  .log { background:#08080a; border:1px solid var(--line); border-radius:6px; padding:8px; font:11px/1.4 ui-monospace,Consolas,monospace; color:#a1a1aa; max-height:180px; overflow-y:auto; white-space:pre-wrap; word-break:break-word; }
+  .pill { display:inline-block; padding:2px 7px; border-radius:99px; font-size:10px; letter-spacing:.04em; }
+  .pill.live { background:#064e3b; color:#34d399; }
+  .pill.partial { background:#451a03; color:#fbbf24; }
+  .pill.fail { background:#450a0a; color:#fca5a5; }
+  .footer { text-align:center; color:var(--dim); font-size:11px; margin-top:16px; }
+  .footer a { color:var(--accent); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Synal Live Companion · Test Dashboard</h1>
+  <p class="lead">SYNAL-002 · phone-first companion · zero-deploy test rig. Tap buttons → watch beats land.</p>
+
+  <section class="card">
+    <h2>System status</h2>
+    <div class="stat-row" id="status-grid">
+      <div class="stat"><div class="k">Loading…</div><div class="v">—</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn" onclick="refreshStatus()">↻ Refresh status</button>
+      <button class="btn primary" onclick="runFullSuite()">Run 5-fixture suite</button>
+      <button class="btn" onclick="manualF1()">Start F1 manual</button>
+      <button class="btn" onclick="testAudD()">Test AudD (SoundHelix)</button>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Latest beats (your session)</h2>
+    <div id="beats"><p style="color:var(--dim);font-size:12px;">No beats yet — hit "Start F1 manual" or "Run 5-fixture suite" above.</p></div>
+  </section>
+
+  <section class="card">
+    <h2>Activity log</h2>
+    <div class="log" id="log"></div>
+  </section>
+
+  <div class="footer">
+    Polling every 10s. Cron tick is 60s.<br>
+    Decision record: <a href="https://github.com/TML-4PM/mcp-command-centre/tree/main/synal/live-companion">TML-4PM/mcp-command-centre/synal/live-companion</a>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://lzfgigiyqpuuxslsygjt.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6ZmdpZ2l5cXB1dXhzbHN5Z2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MTc0NjksImV4cCI6MjA1OTk5MzQ2OX0.qUNzDEr2rxjRSClh5P4jeDv_18_yCCkFXTizJqNYSgg';
+
+const USER_REF = 'web-' + Math.random().toString(36).slice(2,8);
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+let feedTimer = null;
+
+function logLine(s) {
+  const t = new Date().toISOString().substr(11,8);
+  $('log').textContent = `[${t}] ${s}\n` + $('log').textContent;
+}
+
+async function rpc(fn, body) {
+  const r = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fn}`, {
+    method:'POST',
+    headers:{'apikey':SUPABASE_ANON_KEY,'Authorization':`Bearer ${SUPABASE_ANON_KEY}`,'Content-Type':'application/json'},
+    body: JSON.stringify(body||{})
+  });
+  if (!r.ok) throw new Error(`${fn} → ${r.status} ${await r.text()}`);
+  return r.json();
+}
+
+async function refreshStatus() {
+  try {
+    const d = await rpc('synal_status', {});
+    const realityClass = d.asset.reality_status === 'REAL' ? 'good' : (d.asset.reality_status === 'PARTIAL' ? 'warn' : '');
+    const pill = `<span class="pill ${d.asset.reality_status==='REAL'?'live':d.asset.reality_status==='PARTIAL'?'partial':'fail'}">${d.asset.reality_status}</span>`;
+    $('status-grid').innerHTML = `
+      <div class="stat"><div class="k">Asset</div><div class="v ${realityClass}">${pill}</div></div>
+      <div class="stat"><div class="k">pg_cron</div><div class="v good">job ${d.cron_job?.jobid} · ${d.cron_job?.active?'live':'off'}</div></div>
+      <div class="stat"><div class="k">Active sessions</div><div class="v">${d.active_sessions}</div></div>
+      <div class="stat"><div class="k">Total beats</div><div class="v">${d.total_beats}</div></div>
+      <div class="stat"><div class="k">Personas</div><div class="v">${d.personas_seeded}</div></div>
+      <div class="stat"><div class="k">Fixtures</div><div class="v">${d.fixtures}</div></div>
+      <div class="stat"><div class="k">Your user_ref</div><div class="v" style="font-size:12px;">${USER_REF}</div></div>
+      <div class="stat"><div class="k">Last beat at</div><div class="v" style="font-size:11px;">${d.last_beat_at ? new Date(d.last_beat_at).toLocaleTimeString() : '—'}</div></div>
+    `;
+    logLine(`status: asset=${d.asset.reality_status} sessions=${d.active_sessions} beats=${d.total_beats}`);
+  } catch (e) { logLine('status ERROR: ' + e.message); }
+}
+
+async function refreshFeed() {
+  try {
+    const rows = await rpc('synal_feed_for_user', { p_user_ref: USER_REF });
+    if (!rows.length) {
+      $('beats').innerHTML = '<p style="color:var(--dim);font-size:12px;">No beats yet for your session. Tap a button above.</p>';
+      return;
+    }
+    $('beats').innerHTML = rows.slice(0,6).map(b => `
+      <div class="beat ${b.trigger_type==='weather_rain' || b.trigger_type==='safety_car' ? 'warn' : ''}">
+        <div class="trigger">${esc(b.trigger_type)} · seq ${b.seq}</div>
+        <div class="headline">${esc(b.headline)}</div>
+        <div class="explainer">${esc(b.explainer || '')}</div>
+      </div>`).join('');
+  } catch (e) { logLine('feed ERROR: ' + e.message); }
+}
+
+async function runFullSuite() {
+  logLine('Running 5-fixture suite…');
+  try {
+    const d = await rpc('synal_run_test_suite', { p_user_ref: USER_REF });
+    const pass = d.results.filter(r => r.ok).length;
+    logLine(`Suite → ${pass}/${d.fixtures_run} passed`);
+    d.results.forEach(r => logLine(`  · ${r.fixture_slug}: ${r.ok ? '✓ ' + (r.title || r.persona_slug) : '✗ '+r.error}`));
+  } catch (e) { logLine('Suite ERROR: ' + e.message); }
+  await refreshStatus();
+  await refreshFeed();
+}
+
+async function manualF1() {
+  logLine('Starting F1 manual session…');
+  try {
+    const d = await rpc('synal_start_manual_session', { p_user_ref: USER_REF, p_persona_slug: 'f1-strategist', p_content_title: 'F1 manual (dashboard)' });
+    logLine(`F1 session ${d.session_id?.substr(0,8)} → ${d.beats_emitted} beats emitted`);
+  } catch (e) { logLine('F1 ERROR: ' + e.message); }
+  await refreshStatus();
+  await refreshFeed();
+}
+
+async function testAudD() {
+  const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
+  logLine('AudD identify: SoundHelix #1…');
+  try {
+    const d = await rpc('synal_audd_identify', { p_audio_url: url, p_user_ref: USER_REF });
+    logLine(`AudD → ${d.identified ? '✓ ' + d.title + ' / ' + d.artist : '✗'} · persona=${d.persona_slug} · key=${d.key_status}`);
+  } catch (e) { logLine('AudD ERROR: ' + e.message); }
+  await refreshStatus();
+}
+
+refreshStatus();
+feedTimer = setInterval(() => { refreshStatus(); refreshFeed(); }, 10000);
+logLine(`Dashboard ready. user_ref=${USER_REF}`);
+</script>
+</body>
+</html>
