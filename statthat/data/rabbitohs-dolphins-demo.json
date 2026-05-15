@@ -1,0 +1,40 @@
+{
+  "_meta": {
+    "project": "STATthat-001",
+    "version": "v0.1",
+    "committed_at": "2026-05-15",
+    "author": "claude-code",
+    "note": "Hand-seeded illustrative demo state. NOT a live broadcast feed."
+  },
+  "room": {
+    "code": "SOUTHS01",
+    "sport": "nrl",
+    "home_team": "South Sydney Rabbitohs",
+    "away_team": "Dolphins",
+    "match_label": "NRL Round 11 · Demo",
+    "match_state": {
+      "round": 11,
+      "period": "Q2",
+      "clock": "28:14",
+      "home_score": 12,
+      "away_score": 8,
+      "possession": "Rabbitohs",
+      "venue": "Accor Stadium"
+    }
+  },
+  "cards": [
+    {"seq": 1, "kind": "watch_this", "headline": "Latrell on the left edge", "body": "Mitchell touched the ball on 3 of the last 4 sets. Dolphins right edge has shifted in; expect a sweep play.", "confidence": 0.78},
+    {"seq": 2, "kind": "prediction", "headline": "Souths kick on tackle 5", "body": "Field position 35m out, wind behind. Walker's last 6 kicks in this zone ended in repeat sets or 7-tackle resets.", "confidence": 0.72},
+    {"seq": 3, "kind": "weird_stat", "headline": "Souths 92% in the last 10", "body": "Final 10 minutes of each half this season: Souths complete 92%. League average: 78%.", "confidence": 0.91}
+  ],
+  "participation_seed": [
+    {"handle": "@bunny_til_i_die", "kind": "reaction", "payload": "BIG CARRY!", "emoji": "🐰"},
+    {"handle": "@brisvegas_jim", "kind": "comment", "payload": "sweep play coming watch this", "emoji": "👀"},
+    {"handle": "@latrell_szn", "kind": "prediction", "payload": "try in next 3 sets", "emoji": "🎯"},
+    {"handle": "@cherry_evans_diehard", "kind": "comment", "payload": "walker getting his eye in"},
+    {"handle": "@nrl_data_nerd", "kind": "reaction", "payload": "that stat is wild", "emoji": "🤯"},
+    {"handle": "@south_syd_local", "kind": "comment", "payload": "wind has actually died down"},
+    {"handle": "@dolphins_pod", "kind": "reaction", "payload": "defence holding well", "emoji": "🛡️"},
+    {"handle": "@first_grade_jenny", "kind": "comment", "payload": "set restart incoming"}
+  ]
+}
