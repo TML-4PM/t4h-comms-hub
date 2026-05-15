@@ -1,0 +1,73 @@
+{
+  "task_id": "T4H-AICD-LINEAGE-PROGRAM-EXECUTE-001",
+  "intent": "Turn AI Cognitive Diversity lineage work into an executable production evidence and launch program, not another thinking artifact.",
+  "status": "READY_FOR_BRIDGE_EXECUTION",
+  "priority": "P0",
+  "owner": "Tech 4 Humanity / Augmented Humanity Coach / Own Your AI",
+  "truth_constraints": {
+    "universities_involved": false,
+    "grants_received": false,
+    "peer_reviewed_science": false,
+    "supported_by": ["Tech 4 Humanity", "Augmented Humanity Coach", "Own Your AI"],
+    "workfamilyai_in_ownership_line": false,
+    "source_basis": "actual PCs and organisational environments, public websites, LinkedIn/reposts, product experiments, app lessons, signal/identity/consent/BCI lineage"
+  },
+  "artifacts_existing": [
+    {
+      "path": "lineage/ai-cognitive-diversity-lineage-map.md",
+      "commit_sha": "c97c5722f543d1216beb6f7dcccec7147164fcb3",
+      "role": "canonical lineage map"
+    },
+    {
+      "path": "lineage/ai-cognitive-diversity-production-program.html",
+      "commit_sha": "de52c558c79876313b5b69aee281aa5837739ba2",
+      "role": "production control UI shell"
+    }
+  ],
+  "required_workers": [
+    {
+      "name": "publication_lineage_crawler",
+      "purpose": "Find and capture all public websites, LinkedIn posts, reposts and public references for AICD, AI Sweet Spots, Own Your AI, CalmBound/Kids Safe, ConsentX, MyNeuralSignal, BCI governance and related lineage terms.",
+      "outputs": ["publication_lineage_register.csv", "publication_lineage_register.json", "screenshots/", "urls_verified.json"],
+      "done_when": "Each claim has URL, date captured, screenshot/hash and source classification."
+    },
+    {
+      "name": "deployment_evidence_registry_builder",
+      "purpose": "Create de-identified register of actual PCs / organisational environment evidence, including what was measured, where, when, and what can be publicly claimed.",
+      "outputs": ["deployment_evidence_register.csv", "deployment_data_dictionary.md", "redaction_policy.md"],
+      "done_when": "Every deployment claim is classified REAL/PARTIAL/BLOCKED with evidence type and redaction state."
+    },
+    {
+      "name": "claims_ledger_generator",
+      "purpose": "Generate machine-readable claim ledger for poster, launch page, grant pack and media Q&A.",
+      "outputs": ["claims-ledger.json", "claims-ledger.md", "claims-risk-report.md"],
+      "done_when": "No public-facing claim remains unclassified."
+    },
+    {
+      "name": "visual_lineage_publisher",
+      "purpose": "Turn production program into a public-safe visual tree, executive one-pager and launch appendix.",
+      "outputs": ["lineage-visual.html", "lineage-one-pager.md", "lineage-launch-faq.md"],
+      "done_when": "Public-safe version removes universities/grants/peer-review claims and shows supported-by line correctly."
+    },
+    {
+      "name": "funding_partner_mapper",
+      "purpose": "Build list of grant, university, partner and hyperscaler funding targets to pursue after evidence pack is ready.",
+      "outputs": ["funding-targets.csv", "partner-outreach-notes.md", "grant-pathway-map.md"],
+      "done_when": "At least 30 targets are scored by fit, urgency, evidence required and next action."
+    },
+    {
+      "name": "ip_preparation_packager",
+      "purpose": "Package patent/trademark candidates without claiming granted protection.",
+      "outputs": ["ip-candidate-register.csv", "ip-safe-language.md", "legal-review-questions.md"],
+      "done_when": "Each candidate has name, category, source artifact, novelty signal, risk and next legal step."
+    }
+  ],
+  "execution_rules": {
+    "no_more_thinking_only": true,
+    "retry_policy": "3 tries in 2 hours, then route to next available worker and log blocker",
+    "hitl": "only for credentials, legal signoff, destructive actions, paid filings, or private data release",
+    "evidence_required_for_real": true,
+    "receipt_required": true
+  },
+  "bridge_next_action": "Execute workers, write outputs into repo under lineage/evidence/, open/update issue with receipts, and return runtime receipt."
+}
