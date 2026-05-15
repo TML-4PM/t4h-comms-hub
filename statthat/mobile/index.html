@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>STATthat</title><style>
+:root{--fg:#f4f4f5;--dim:#71717a;--accent:#22d3ee;--warn:#f59e0b;--card:#18181b;--line:#27272a}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#050507;color:var(--fg);font:14px/1.45 -apple-system,system-ui,sans-serif;min-height:100vh}
+.shell{max-width:480px;margin:0 auto;padding:18px 14px 110px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.brand{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.room{font-size:11px;color:var(--accent);font-weight:600}
+.hud{background:linear-gradient(135deg,#0f0f12,#18181b);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.hud .label{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em}
+.hud .score{display:flex;justify-content:space-between;align-items:center;margin-top:4px}
+.hud .team{display:flex;flex-direction:column}
+.hud .name{font-size:12px;color:var(--dim)}
+.hud .pts{font-size:26px;font-weight:700}
+.hud .meta{margin-top:8px;font-size:11px;color:var(--dim);display:flex;justify-content:space-between;font-variant-numeric:tabular-nums}
+.cards{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:11px 12px}
+.card.watch_this{border-left:3px solid var(--accent)}
+.card.prediction{border-left:3px solid #a855f7}
+.card.weird_stat{border-left:3px solid var(--warn)}
+.card .kind{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
+.card.watch_this .kind{color:var(--accent)}
+.card.prediction .kind{color:#a855f7}
+.card.weird_stat .kind{color:var(--warn)}
+.card .headline{font-size:15px;font-weight:700;margin-bottom:3px}
+.card .body{font-size:12px;color:#a1a1aa;line-height:1.45}
+.feed{margin-top:8px}
+.feed .ptn{background:#0f0f12;border:1px solid var(--line);border-radius:6px;padding:6px 8px;font-size:11px;margin-bottom:4px}
+.feed .who{color:var(--accent);font-weight:600}
+.feed .meta{color:var(--dim);font-size:9px}
+.composer{position:fixed;bottom:0;left:0;right:0;background:#08080a;border-top:1px solid var(--line);padding:10px 12px}
+.composer .row{max-width:480px;margin:0 auto;display:flex;gap:6px}
+.composer input{flex:1;background:#18181b;border:1px solid var(--line);color:var(--fg);padding:9px 11px;border-radius:8px;font:13px/1 inherit}
+.composer button{background:var(--accent);color:#0a0a0c;border:none;padding:9px 14px;border-radius:8px;font:600 13px/1 inherit;cursor:pointer}
+.composer .reactions{max-width:480px;margin:6px auto 0;display:flex;gap:6px}
+.composer .reactions button{background:#18181b;color:var(--fg);font-size:18px;padding:6px 10px;flex:1}
+.join{padding:30px 12px;text-align:center}
+.join h1{font-size:20px;margin-bottom:8px}
+.join p{color:var(--dim);font-size:13px;margin-bottom:18px}
+.join input{display:block;width:100%;max-width:280px;margin:0 auto 10px;background:#18181b;border:1px solid var(--line);color:var(--fg);padding:11px;border-radius:8px;text-align:center;letter-spacing:.18em;font-weight:600;text-transform:uppercase;font:600 16px/1 inherit}
+.join button{background:var(--accent);color:#0a0a0c;border:none;padding:11px 24px;border-radius:8px;font:600 14px/1 inherit;cursor:pointer}
+.hidden{display:none}
+</style></head><body>
+<div class="shell"><div class="top"><div class="brand">STATthat</div><div class="room" id="top-room"></div></div>
+<div id="join-view" class="join hidden"><h1>Join the room</h1><p>Enter the code shown on the TV.</p><input id="code-input" placeholder="SOUTHS01" maxlength="12"><input id="handle-input" placeholder="your handle (optional)" maxlength="40"><button onclick="doJoin()">Join</button></div>
+<div id="room-view" class="hidden"><div class="hud"><div class="label" id="match-label">loading</div><div class="score"><div class="team"><span class="name" id="home-name">--</span><span class="pts" id="home-score">0</span></div><div class="team" style="text-align:right"><span class="name" id="away-name">--</span><span class="pts" id="away-score">0</span></div></div><div class="meta"><span id="period">--</span><span id="clock">--:--</span></div></div><div class="cards" id="cards"></div><div class="feed" id="feed"></div></div></div>
+<div class="composer hidden" id="composer"><div class="row"><input id="msg-input" placeholder="Add a thought…" maxlength="280"><button onclick="sendMsg()">Send</button></div><div class="reactions"><button onclick="sendReact('🐰','rabbitohs go')">🐰</button><button onclick="sendReact('🔥','fire')">🔥</button><button onclick="sendReact('🎯','good call')">🎯</button><button onclick="sendReact('🤯','wow')">🤯</button><button onclick="sendReact('👀','watching')">👀</button></div></div>
+<script>
+const S='https://lzfgigiyqpuuxslsygjt.supabase.co';
+const K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6ZmdpZ2l5cXB1dXhzbHN5Z2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MTc0NjksImV4cCI6MjA1OTk5MzQ2OX0.qUNzDEr2rxjRSClh5P4jeDv_18_yCCkFXTizJqNYSgg';
+const p=new URLSearchParams(location.search);
+let ROOM=(p.get('room')||'').toUpperCase();
+let HANDLE=localStorage.getItem('statthat_handle')||'@guest_'+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s??'').replace(/[<>&]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+const LABEL={watch_this:'Watch this',prediction:'Prediction',weird_stat:'Weird stat',moment:'Moment'};
+async function rpc(fn,b){const r=await fetch(`${S}/rest/v1/rpc/${fn}`,{method:'POST',headers:{'apikey':K,'Authorization':`Bearer ${K}`,'Content-Type':'application/json'},body:JSON.stringify(b||{})});return r.json();}
+function showJoin(){document.getElementById('join-view').classList.remove('hidden');document.getElementById('room-view').classList.add('hidden');document.getElementById('composer').classList.add('hidden');}
+function showRoom(){document.getElementById('join-view').classList.add('hidden');document.getElementById('room-view').classList.remove('hidden');document.getElementById('composer').classList.remove('hidden');document.getElementById('top-room').textContent=ROOM;}
+async function doJoin(){const code=document.getElementById('code-input').value.trim().toUpperCase();const h=document.getElementById('handle-input').value.trim();if(!code){alert('enter a code');return;}if(h){HANDLE=h.startsWith('@')?h:'@'+h;localStorage.setItem('statthat_handle',HANDLE);}const r=await rpc('statthat_join_room',{p_code:code,p_handle:HANDLE});if(!r.ok){alert('room not found: '+code);return;}ROOM=code;history.replaceState(null,'','?room='+ROOM);showRoom();tick();}
+async function sendMsg(){const inp=document.getElementById('msg-input');const v=inp.value.trim();if(!v)return;inp.value='';await rpc('statthat_post_participation',{p_code:ROOM,p_handle:HANDLE,p_kind:'comment',p_payload:v,p_emoji:null});tick();}
+async function sendReact(emoji,payload){await rpc('statthat_post_participation',{p_code:ROOM,p_handle:HANDLE,p_kind:'reaction',p_payload:payload,p_emoji:emoji});tick();}
+async function tick(){if(!ROOM)return;const d=await rpc('statthat_room_state',{p_code:ROOM});if(!d.ok){showJoin();return;}const m=d.room.match_state||{};document.getElementById('home-name').textContent=d.room.home_team;document.getElementById('away-name').textContent=d.room.away_team;document.getElementById('home-score').textContent=m.home_score??0;document.getElementById('away-score').textContent=m.away_score??0;document.getElementById('clock').textContent=m.clock??'--:--';document.getElementById('period').textContent=m.period??'';document.getElementById('match-label').textContent=d.room.match_label;document.getElementById('cards').innerHTML=(d.cards||[]).map(c=>`<div class="card ${esc(c.kind)}"><div class="kind">${LABEL[c.kind]||c.kind}</div><div class="headline">${esc(c.headline)}</div><div class="body">${esc(c.body)}</div></div>`).join('');document.getElementById('feed').innerHTML=(d.participation||[]).slice(0,6).map(p=>{const ago=Math.max(0,Math.floor((Date.now()-new Date(p.created_at).getTime())/1000));const ts=ago<60?`${ago}s`:`${Math.floor(ago/60)}m`;return `<div class="ptn"><span class="who">${esc(p.participant_handle)}</span> ${esc(p.emoji||'')} ${esc(p.payload)} <span class="meta">· ${ts}</span></div>`;}).join('');}
+if(ROOM){showRoom();tick();setInterval(tick,4000);}else{showJoin();}
+</script></body></html>
