@@ -3,64 +3,96 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Synal Live Companion — Test Dashboard</title>
+<title>Synal Live Companion · Magic Round Test Rig</title>
 <style>
   :root { --bg:#0a0a0c; --fg:#f4f4f5; --dim:#71717a; --accent:#22d3ee; --warn:#f59e0b; --good:#34d399; --bad:#ef4444; --card:#18181b; --line:#27272a; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  html,body { background:var(--bg); color:var(--fg); font:14px/1.5 -apple-system,SF Pro Text,system-ui,sans-serif; min-height:100vh; padding:16px; }
-  .wrap { max-width:760px; margin:0 auto; }
-  h1 { font-size:18px; margin-bottom:4px; }
-  .lead { color:var(--dim); font-size:13px; margin-bottom:16px; }
-  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:12px; }
-  .card h2 { font-size:13px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); margin-bottom:10px; }
-  .stat-row { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; font-variant-numeric:tabular-nums; }
+  html,body { background:var(--bg); color:var(--fg); font:14px/1.5 -apple-system,SF Pro Text,system-ui,sans-serif; min-height:100vh; padding:14px; }
+  .wrap { max-width:760px; margin:0 auto; padding-bottom:30px; }
+  h1 { font-size:18px; margin-bottom:2px; }
+  .lead { color:var(--dim); font-size:12px; margin-bottom:14px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px; margin-bottom:10px; }
+  .card h2 { font-size:12px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); margin-bottom:8px; display:flex; justify-content:space-between; }
+  .card h2 .badge { font-size:10px; color:var(--accent); }
+  .stat-row { display:grid; grid-template-columns:repeat(2,1fr); gap:6px; font-variant-numeric:tabular-nums; }
   @media(min-width:560px){.stat-row{grid-template-columns:repeat(4,1fr);}}
-  .stat { background:#0f0f12; border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
-  .stat .k { font-size:10px; color:var(--dim); letter-spacing:.06em; text-transform:uppercase; }
-  .stat .v { font-size:16px; font-weight:600; margin-top:2px; }
+  .stat { background:#0f0f12; border:1px solid var(--line); border-radius:6px; padding:7px 9px; }
+  .stat .k { font-size:9px; color:var(--dim); letter-spacing:.05em; text-transform:uppercase; }
+  .stat .v { font-size:14px; font-weight:600; margin-top:1px; }
   .stat .v.good { color:var(--good); }
   .stat .v.warn { color:var(--warn); }
-  .btn-row { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
-  .btn { background:#1f1f23; border:1px solid var(--line); color:var(--fg); padding:9px 12px; border-radius:8px; font:600 12px/1 inherit; cursor:pointer; }
+  .stat .v.bad { color:var(--bad); }
+  .btn-row { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+  .btn { background:#1f1f23; border:1px solid var(--line); color:var(--fg); padding:9px 11px; border-radius:7px; font:600 11px/1 inherit; cursor:pointer; flex:1 1 auto; min-width:80px; }
   .btn.primary { background:var(--accent); color:#0a0a0c; border-color:var(--accent); }
+  .btn.danger { background:var(--bad); color:#fff; border-color:var(--bad); }
   .btn:hover { filter:brightness(1.1); }
   .btn:disabled { opacity:.4; cursor:wait; }
-  .beat { background:#0f0f12; border:1px solid var(--line); border-left:3px solid var(--accent); border-radius:8px; padding:10px; margin-bottom:6px; }
-  .beat .trigger { font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--accent); margin-bottom:2px; }
-  .beat .headline { font-size:14px; font-weight:600; margin-bottom:2px; }
-  .beat .explainer { font-size:12px; color:#a1a1aa; }
-  .beat.warn { border-left-color:var(--warn); }
-  .beat.warn .trigger { color:var(--warn); }
-  .log { background:#08080a; border:1px solid var(--line); border-radius:6px; padding:8px; font:11px/1.4 ui-monospace,Consolas,monospace; color:#a1a1aa; max-height:180px; overflow-y:auto; white-space:pre-wrap; word-break:break-word; }
-  .pill { display:inline-block; padding:2px 7px; border-radius:99px; font-size:10px; letter-spacing:.04em; }
-  .pill.live { background:#064e3b; color:#34d399; }
-  .pill.partial { background:#451a03; color:#fbbf24; }
-  .pill.fail { background:#450a0a; color:#fca5a5; }
-  .footer { text-align:center; color:var(--dim); font-size:11px; margin-top:16px; }
+  .match-row { display:flex; align-items:center; gap:8px; padding:7px 0; border-bottom:1px solid var(--line); font-size:12px; }
+  .match-row:last-child { border-bottom:none; }
+  .match-row .label { flex:1; }
+  .match-row .pri { font-size:10px; color:var(--dim); }
+  .ledger-row { background:#0f0f12; border:1px solid var(--line); border-left:3px solid var(--good); border-radius:6px; padding:8px; margin-bottom:5px; font-size:11px; }
+  .ledger-row.no_match { border-left-color:var(--dim); }
+  .ledger-row.expected_no_match { border-left-color:var(--warn); }
+  .ledger-row.partial { border-left-color:var(--warn); }
+  .ledger-row .file { font-weight:600; font-size:11px; }
+  .ledger-row .meta { color:var(--dim); font-size:10px; font-variant-numeric:tabular-nums; }
+  .ledger-row .id { font-size:11px; color:var(--good); }
+  .ledger-row.no_match .id { color:var(--dim); }
+  .log { background:#08080a; border:1px solid var(--line); border-radius:5px; padding:7px; font:10px/1.4 ui-monospace,Consolas,monospace; color:#a1a1aa; max-height:160px; overflow-y:auto; white-space:pre-wrap; word-break:break-word; }
+  input[type=file] { display:none; }
+  .file-label { background:#1f1f23; border:1px solid var(--line); color:var(--fg); padding:9px 11px; border-radius:7px; font:600 11px/1 inherit; cursor:pointer; display:inline-block; }
+  .recording-indicator { display:none; align-items:center; gap:6px; padding:8px; background:rgba(239,68,68,.15); border:1px solid var(--bad); border-radius:6px; font-size:11px; margin-top:6px; }
+  .recording-indicator.active { display:flex; }
+  .recording-indicator .dot { width:8px; height:8px; border-radius:50%; background:var(--bad); animation:pulse 1s infinite; }
+  @keyframes pulse { 50% { opacity:.3; } }
+  select { background:#0f0f12; color:var(--fg); border:1px solid var(--line); border-radius:6px; padding:7px; font-size:12px; width:100%; }
+  .footer { text-align:center; color:var(--dim); font-size:10px; margin-top:14px; line-height:1.6; }
   .footer a { color:var(--accent); text-decoration:none; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <h1>Synal Live Companion · Test Dashboard</h1>
-  <p class="lead">SYNAL-002 · phone-first companion · zero-deploy test rig. Tap buttons → watch beats land.</p>
+  <h1>Synal Live Companion · Magic Round</h1>
+  <p class="lead">SYNAL-002 + AUD_SportsAudio_MagicRound_20260515 · capture → fingerprint → ledger</p>
 
   <section class="card">
-    <h2>System status</h2>
+    <h2>System status <span class="badge" id="user-ref-display"></span></h2>
     <div class="stat-row" id="status-grid">
       <div class="stat"><div class="k">Loading…</div><div class="v">—</div></div>
     </div>
     <div class="btn-row">
-      <button class="btn" onclick="refreshStatus()">↻ Refresh status</button>
-      <button class="btn primary" onclick="runFullSuite()">Run 5-fixture suite</button>
-      <button class="btn" onclick="manualF1()">Start F1 manual</button>
-      <button class="btn" onclick="testAudD()">Test AudD (SoundHelix)</button>
+      <button class="btn" onclick="refreshAll()">↻ Refresh</button>
     </div>
   </section>
 
   <section class="card">
-    <h2>Latest beats (your session)</h2>
-    <div id="beats"><p style="color:var(--dim);font-size:12px;">No beats yet — hit "Start F1 manual" or "Run 5-fixture suite" above.</p></div>
+    <h2>Capture &amp; identify <span class="badge">b64 → AudD</span></h2>
+    <div class="btn-row">
+      <button class="btn primary" id="rec-btn" onclick="toggleRecord()">● Record 10s</button>
+      <label class="file-label" for="file-input">📁 Upload mp3</label>
+      <input type="file" id="file-input" accept="audio/*" onchange="uploadFile(event)">
+      <button class="btn" onclick="testKnownClip()">Smoke test (SoundHelix)</button>
+    </div>
+    <div class="recording-indicator" id="rec-indicator"><span class="dot"></span> Recording… <span id="rec-time"></span></div>
+    <p style="font-size:11px;color:var(--dim);margin-top:8px;">Record uses your mic. Upload accepts any mp3/m4a/wav/ogg. Files never leave your device except for the fingerprint POST to Supabase → AudD. Audio bytes are not stored, only the recognition result.</p>
+  </section>
+
+  <section class="card">
+    <h2>Magic Round manual sessions <span class="badge">2026-05-15 to 17</span></h2>
+    <div id="magic-round-list">
+      <div class="match-row"><span class="label">South Sydney Rabbitohs v Dolphins</span><span class="pri">P1</span><button class="btn" onclick="startMatch('Rabbitohs v Dolphins','Suncorp Stadium','2026-05-15')">Start</button></div>
+      <div class="match-row"><span class="label">Sharks v Bulldogs</span><span class="pri">P2</span><button class="btn" onclick="startMatch('Sharks v Bulldogs',null,'2026-05-15')">Start</button></div>
+      <div class="match-row"><span class="label">Titans v Knights</span><span class="pri">P2</span><button class="btn" onclick="startMatch('Titans v Knights',null,'2026-05-17')">Start</button></div>
+      <div class="match-row"><span class="label">Warriors v Broncos</span><span class="pri">P3</span><button class="btn" onclick="startMatch('Warriors v Broncos',null,'2026-05-17')">Start</button></div>
+      <div class="match-row"><span class="label">Panthers v Dragons</span><span class="pri">P3</span><button class="btn" onclick="startMatch('Panthers v Dragons',null,'2026-05-17')">Start</button></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Results ledger <span class="badge" id="ledger-counts">—</span></h2>
+    <div id="ledger"><p style="color:var(--dim);font-size:11px;">No clips captured yet.</p></div>
   </section>
 
   <section class="card">
@@ -69,19 +101,21 @@
   </section>
 
   <div class="footer">
-    Polling every 10s. Cron tick is 60s.<br>
-    Decision record: <a href="https://github.com/TML-4PM/mcp-command-centre/tree/main/synal/live-companion">TML-4PM/mcp-command-centre/synal/live-companion</a>
+    Task: <code>AUD_SportsAudio_MagicRound_20260515</code><br>
+    Manifest: <a href="https://github.com/TML-4PM/current-scape/tree/main/sports-audio-tests/AUD_SportsAudio_MagicRound_20260515">TML-4PM/current-scape</a><br>
+    Decision: <a href="https://github.com/TML-4PM/mcp-command-centre/tree/main/synal/live-companion">TML-4PM/mcp-command-centre/synal/live-companion</a>
   </div>
 </div>
 
 <script>
 const SUPABASE_URL = 'https://lzfgigiyqpuuxslsygjt.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx6ZmdpZ2l5cXB1dXhzbHN5Z2p0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ0MTc0NjksImV4cCI6MjA1OTk5MzQ2OX0.qUNzDEr2rxjRSClh5P4jeDv_18_yCCkFXTizJqNYSgg';
+const TASK_ID = 'AUD_SportsAudio_MagicRound_20260515';
+const USER_REF = 'mr-' + Math.random().toString(36).slice(2,8);
 
-const USER_REF = 'web-' + Math.random().toString(36).slice(2,8);
-const $ = (id) => document.getElementById(id);
-const esc = (s) => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
-let feedTimer = null;
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[<>&]/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;'}[c]));
+$('user-ref-display').textContent = USER_REF;
 
 function logLine(s) {
   const t = new Date().toISOString().substr(11,8);
@@ -101,73 +135,106 @@ async function rpc(fn, body) {
 async function refreshStatus() {
   try {
     const d = await rpc('synal_status', {});
-    const realityClass = d.asset.reality_status === 'REAL' ? 'good' : (d.asset.reality_status === 'PARTIAL' ? 'warn' : '');
-    const pill = `<span class="pill ${d.asset.reality_status==='REAL'?'live':d.asset.reality_status==='PARTIAL'?'partial':'fail'}">${d.asset.reality_status}</span>`;
     $('status-grid').innerHTML = `
-      <div class="stat"><div class="k">Asset</div><div class="v ${realityClass}">${pill}</div></div>
-      <div class="stat"><div class="k">pg_cron</div><div class="v good">job ${d.cron_job?.jobid} · ${d.cron_job?.active?'live':'off'}</div></div>
-      <div class="stat"><div class="k">Active sessions</div><div class="v">${d.active_sessions}</div></div>
+      <div class="stat"><div class="k">Asset</div><div class="v ${d.asset.reality_status==='REAL'?'good':'warn'}">${d.asset.reality_status}</div></div>
+      <div class="stat"><div class="k">Cron</div><div class="v good">job ${d.cron_job?.jobid}</div></div>
+      <div class="stat"><div class="k">Sessions</div><div class="v">${d.active_sessions}</div></div>
       <div class="stat"><div class="k">Total beats</div><div class="v">${d.total_beats}</div></div>
-      <div class="stat"><div class="k">Personas</div><div class="v">${d.personas_seeded}</div></div>
-      <div class="stat"><div class="k">Fixtures</div><div class="v">${d.fixtures}</div></div>
-      <div class="stat"><div class="k">Your user_ref</div><div class="v" style="font-size:12px;">${USER_REF}</div></div>
-      <div class="stat"><div class="k">Last beat at</div><div class="v" style="font-size:11px;">${d.last_beat_at ? new Date(d.last_beat_at).toLocaleTimeString() : '—'}</div></div>
     `;
-    logLine(`status: asset=${d.asset.reality_status} sessions=${d.active_sessions} beats=${d.total_beats}`);
   } catch (e) { logLine('status ERROR: ' + e.message); }
 }
 
-async function refreshFeed() {
+async function refreshLedger() {
   try {
-    const rows = await rpc('synal_feed_for_user', { p_user_ref: USER_REF });
-    if (!rows.length) {
-      $('beats').innerHTML = '<p style="color:var(--dim);font-size:12px;">No beats yet for your session. Tap a button above.</p>';
+    const d = await rpc('synal_results_ledger', { p_task_id: TASK_ID, p_limit: 20 });
+    $('ledger-counts').textContent = `${d.real_matches}✓  ${d.no_matches}✗  ${d.expected_no_match}·  ${d.count} total`;
+    if (!d.rows?.length) {
+      $('ledger').innerHTML = '<p style="color:var(--dim);font-size:11px;">No clips captured yet. Hit Record or Upload above.</p>';
       return;
     }
-    $('beats').innerHTML = rows.slice(0,6).map(b => `
-      <div class="beat ${b.trigger_type==='weather_rain' || b.trigger_type==='safety_car' ? 'warn' : ''}">
-        <div class="trigger">${esc(b.trigger_type)} · seq ${b.seq}</div>
-        <div class="headline">${esc(b.headline)}</div>
-        <div class="explainer">${esc(b.explainer || '')}</div>
-      </div>`).join('');
-  } catch (e) { logLine('feed ERROR: ' + e.message); }
+    $('ledger').innerHTML = d.rows.map(r => {
+      const klass = (r.classification||'').toLowerCase();
+      const idStr = r.classification==='REAL_MATCH' ? `✓ ${esc(r.title)} — ${esc(r.artist)}` : r.classification==='NO_MATCH' ? '✗ not in AudD music DB' : `· ${esc(r.classification)}`;
+      return `<div class="ledger-row ${klass}">
+        <div class="file">${esc(r.filename)}</div>
+        <div class="id">${idStr}</div>
+        <div class="meta">${esc(r.method)} · ${r.size_kb}kb · persona=${esc(r.persona_routed||'-')} · ${new Date(r.created_at).toLocaleTimeString()}</div>
+      </div>`;
+    }).join('');
+  } catch (e) { logLine('ledger ERROR: ' + e.message); }
 }
 
-async function runFullSuite() {
-  logLine('Running 5-fixture suite…');
+async function refreshAll() { await Promise.all([refreshStatus(), refreshLedger()]); }
+
+async function identifyBlob(blob, filename, meta) {
+  logLine(`fingerprinting ${filename} (${Math.round(blob.size/1024)}kb)…`);
+  const buf = await blob.arrayBuffer();
+  const b64 = btoa(String.fromCharCode(...new Uint8Array(buf)));
   try {
-    const d = await rpc('synal_run_test_suite', { p_user_ref: USER_REF });
-    const pass = d.results.filter(r => r.ok).length;
-    logLine(`Suite → ${pass}/${d.fixtures_run} passed`);
-    d.results.forEach(r => logLine(`  · ${r.fixture_slug}: ${r.ok ? '✓ ' + (r.title || r.persona_slug) : '✗ '+r.error}`));
-  } catch (e) { logLine('Suite ERROR: ' + e.message); }
-  await refreshStatus();
-  await refreshFeed();
+    const d = await rpc('synal_audd_identify_b64', { p_audio_b64: b64, p_filename: filename, p_user_ref: USER_REF, p_task_id: TASK_ID, p_match_metadata: meta || {} });
+    if (d.identified) logLine(`✓ ${d.title} — ${d.artist} · persona=${d.persona_slug}`);
+    else logLine(`✗ not identified · ${d.audd_status||d.error||'unknown'}`);
+  } catch (e) { logLine('identify ERROR: ' + e.message); }
+  await refreshLedger();
 }
 
-async function manualF1() {
-  logLine('Starting F1 manual session…');
+let recorder = null; let recStart = 0; let recTimer = null; let recChunks = [];
+async function toggleRecord() {
+  if (recorder && recorder.state === 'recording') { recorder.stop(); return; }
+  if (!navigator.mediaDevices) { logLine('mic API unavailable — try Chrome/Safari over HTTPS'); return; }
   try {
-    const d = await rpc('synal_start_manual_session', { p_user_ref: USER_REF, p_persona_slug: 'f1-strategist', p_content_title: 'F1 manual (dashboard)' });
-    logLine(`F1 session ${d.session_id?.substr(0,8)} → ${d.beats_emitted} beats emitted`);
-  } catch (e) { logLine('F1 ERROR: ' + e.message); }
-  await refreshStatus();
-  await refreshFeed();
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    recChunks = [];
+    const mimeType = MediaRecorder.isTypeSupported('audio/webm;codecs=opus') ? 'audio/webm;codecs=opus' : 'audio/mp4';
+    recorder = new MediaRecorder(stream, { mimeType });
+    recorder.ondataavailable = e => { if (e.data.size > 0) recChunks.push(e.data); };
+    recorder.onstop = async () => {
+      clearInterval(recTimer);
+      $('rec-indicator').classList.remove('active');
+      $('rec-btn').textContent = '● Record 10s';
+      stream.getTracks().forEach(t => t.stop());
+      const blob = new Blob(recChunks, { type: mimeType });
+      const ext = mimeType.includes('mp4') ? 'm4a' : 'webm';
+      await identifyBlob(blob, `live-mic-${Date.now()}.${ext}`, { source:'mic_capture', mime:mimeType });
+    };
+    recorder.start();
+    recStart = Date.now();
+    $('rec-indicator').classList.add('active');
+    $('rec-btn').textContent = '■ Stop';
+    recTimer = setInterval(() => { $('rec-time').textContent = ((Date.now()-recStart)/1000).toFixed(1) + 's'; }, 100);
+    setTimeout(() => { if (recorder.state === 'recording') recorder.stop(); }, 10000);
+    logLine('recording 10s… hit Stop early if you want');
+  } catch (e) { logLine('mic ERROR: ' + e.message); }
 }
 
-async function testAudD() {
-  const url = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';
-  logLine('AudD identify: SoundHelix #1…');
+async function uploadFile(ev) {
+  const f = ev.target.files[0]; if (!f) return;
+  await identifyBlob(f, f.name, { source:'file_upload', mime: f.type });
+  ev.target.value = '';
+}
+
+async function testKnownClip() {
+  logLine('downloading SoundHelix mp3…');
   try {
-    const d = await rpc('synal_audd_identify', { p_audio_url: url, p_user_ref: USER_REF });
-    logLine(`AudD → ${d.identified ? '✓ ' + d.title + ' / ' + d.artist : '✗'} · persona=${d.persona_slug} · key=${d.key_status}`);
-  } catch (e) { logLine('AudD ERROR: ' + e.message); }
-  await refreshStatus();
+    const r = await fetch('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+    const blob = await r.blob();
+    await identifyBlob(blob, 'soundhelix-1-known.mp3', { source:'known_smoke_test' });
+  } catch (e) { logLine('smoke ERROR: ' + e.message); }
 }
 
-refreshStatus();
-feedTimer = setInterval(() => { refreshStatus(); refreshFeed(); }, 10000);
-logLine(`Dashboard ready. user_ref=${USER_REF}`);
+async function startMatch(match, venue, date) {
+  logLine(`starting manual session: ${match}`);
+  try {
+    const d = await rpc('synal_start_manual_session', { p_user_ref: USER_REF, p_persona_slug: 'sports-statistician', p_content_title: `NRL Magic Round · ${match}` });
+    logLine(`✓ session ${d.session_id?.substr(0,8)} · ${d.beats_emitted} beats`);
+  } catch (e) { logLine('match ERROR: ' + e.message); }
+  refreshAll();
+}
+
+refreshAll();
+setInterval(refreshAll, 15000);
+logLine(`dashboard v2 ready · user_ref=${USER_REF}`);
+logLine('mic record OR upload OR run smoke test');
 </script>
 </body>
 </html>
